@@ -1,0 +1,23 @@
+{
+  "name": "nodeboy",
+  "version": "1.0.0",
+  "description": "yet another gameboy emulator",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delihiros/nodeboy.git"
+  },
+  "keywords": [
+    "gameboy",
+    "emulator"
+  ],
+  "author": "delihiros",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/delihiros/nodeboy/issues"
+  },
+  "homepage": "https://github.com/delihiros/nodeboy#readme"
+}
