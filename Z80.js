@@ -12,6 +12,8 @@ var machine_cycle = 4 * clock_cycle
 
 module.exports = class Z80 {
   constructor() {
+    this.port = {}
+
     this.register = {
       a: 0,
       b: 0,
@@ -32,14 +34,21 @@ module.exports = class Z80 {
     }
 
     this.instructions = {
-      0x06: LD_B_n,
-      0x00: this.NOP
+      0x00: this.NOP,
+      0x06: this.LD_B_n
     }
   }
 
-  NOP() {
-    console.log("NOP")
+  assocPort(portName, bus) {
+    this.port[portName] = bus
+    console.log(this)
   }
+
+  call(addr, args) {
+    this.instructions[addr](this, ...args)
+  }
+
+  NOP(cpu) {}
 
   /*
     Instruction Parameters Opcode Cycles
@@ -50,5 +59,11 @@ module.exports = class Z80 {
      LD H,n 26 8
      LD L,n 2E 8
      */
-  LD_B_n(n) {}
+  LD_B_n(cpu, n) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: n,
+      data: cpu.register.b
+    })
+  }
 }

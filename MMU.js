@@ -1,6 +1,6 @@
 module.exports = class MMU {
   constructor() {
-    this.memory = []
+    this.memory = [] // new Array((8 + 8) * 1000 * 8).fill(0)
   }
   readByte(addr) {
     return this.memory[addr]
@@ -9,23 +9,23 @@ module.exports = class MMU {
     return this.memory[addr] + this.memory[addr + 1]
   }
   writeByte(addr, data) {
-    return this.memory[addr] = data
+    this.memory[addr] = data
   }
   writeWord(addr, data) {
-    // TODO
-    return this.memory[addr] = data
+    this.memory[addr] = data & 0b11110000
+    this.memory[addr + 1] = data & 0b00001111
   }
 
-  receive(message) {
+  interact(message) {
     switch (message.op) {
       case 'readByte':
-        return readByte(message.addr)
+        return this.readByte(message.addr)
       case 'readWord':
-        return readWord(message.addr)
+        return this.readWord(message.addr)
       case 'writeByte':
-        return writeByte(message.addr, message.data)
+        return this.writeByte(message.addr, message.data)
       case 'writeWord':
-        return writeWord(message.addr, message.data)
+        return this.writeWord(message.addr, message.data)
     }
   }
 }

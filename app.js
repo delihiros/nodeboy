@@ -2,4 +2,5 @@ var NodeBoy = require('./NodeBoy')
 
 var nodeboy = new NodeBoy()
 
-// nodeboy.cpu.instructions[0x00]()
+nodeboy.cpu.call(0x06, [0x1])
+console.log(nodeboy)
