@@ -23,8 +23,8 @@ module.exports = class Z80 {
       f: 0,
       h: 0,
       l: 0,
-      pc: 0x100,
-      sp: 0xfffe,
+      pc: 0, // 0x100,
+      sp: 0, // 0xfffe,
       m: 0, // clock for last instruction
       t: 0 // clock for last instruction
     }
@@ -35,7 +35,33 @@ module.exports = class Z80 {
 
     this.instructions = {
       0x00: this.NOP,
-      0x06: this.LD_B_n
+      0x06: this.LD_B_n,
+      0x0e: this.LD_C_n,
+      0x16: this.LD_D_n,
+      0x1e: this.LD_E_n,
+      0x26: this.LD_H_n,
+      0x2e: this.LD_L_n,
+    }
+  }
+
+  reset() {
+    this.register = {
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0,
+      f: 0,
+      h: 0,
+      l: 0,
+      pc: 0,
+      sp: 0,
+      m: 0,
+      t: 0
+    }
+    this.clock = {
+      m: 0,
+      t: 0
     }
   }
 
@@ -65,5 +91,285 @@ module.exports = class Z80 {
       addr: n,
       data: cpu.register.b
     })
+    cpu.register.m = 8
+  }
+  LD_C_n(cpu, n) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: n,
+      data: cpu.register.c
+    })
+    cpu.register.m = 8
+  }
+  LD_D_n(cpu, n) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: n,
+      data: cpu.register.d
+    })
+    cpu.register.m = 8
+  }
+  LD_E_n(cpu, n) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: n,
+      data: cpu.register.e
+    })
+    cpu.register.m = 8
+  }
+  LD_H_n(cpu, n) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: n,
+      data: cpu.register.h
+    })
+    cpu.register.m = 8
+  }
+  LD_L_n(cpu, n) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: n,
+      data: cpu.register.l
+    })
+    cpu.register.m = 8
+  }
+
+  LD_A_A(cpu) {
+    cpu.register.a = cpu.register.a
+    cpu.register.m = 4
+  }
+  LD_A_B(cpu) {
+    cpu.register.a = cpu.register.b
+    cpu.register.m = 4
+  }
+  LD_A_C(cpu) {
+    cpu.register.a = cpu.register.c
+    cpu.register.m = 4
+  }
+  LD_A_D(cpu) {
+    cpu.register.a = cpu.register.d
+    cpu.register.m = 4
+  }
+  LD_A_E(cpu) {
+    cpu.register.a = cpu.register.e
+    cpu.register.m = 4
+  }
+  LD_A_H(cpu) {
+    cpu.register.a = cpu.register.h
+    cpu.register.m = 4
+  }
+  LD_A_L(cpu) {
+    cpu.register.a = cpu.register.l
+    cpu.register.m = 4
+  }
+  LD_A_HL(cpu) { // TODO
+    cpu.register.a = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_B_B(cpu) {
+    cpu.register.b = cpu.register.b
+    cpu.register.m = 4
+  }
+  LD_B_C(cpu) {
+    cpu.register.b = cpu.register.c
+    cpu.register.m = 4
+  }
+  LD_B_D(cpu) {
+    cpu.register.b = cpu.register.d
+    cpu.register.m = 4
+  }
+  LD_B_E(cpu) {
+    cpu.register.b = cpu.register.e
+    cpu.register.m = 4
+  }
+  LD_B_H(cpu) {
+    cpu.register.b = cpu.register.h
+    cpu.register.m = 4
+  }
+  LD_B_L(cpu) {
+    cpu.register.b = cpu.register.l
+    cpu.register.m = 4
+  }
+  LD_B_HL(cpu) { // TODO
+    cpu.register.b = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_C_B(cpu) {
+    cpu.register.c = cpu.register.b
+    cpu.register.m = 4
+  }
+  LD_C_C(cpu) {
+    cpu.register.c = cpu.register.c
+    cpu.register.m = 4
+  }
+  LD_C_D(cpu) {
+    cpu.register.c = cpu.register.d
+    cpu.register.m = 4
+  }
+  LD_C_E(cpu) {
+    cpu.register.c = cpu.register.e
+    cpu.register.m = 4
+  }
+  LD_C_H(cpu) {
+    cpu.register.c = cpu.register.h
+    cpu.register.m = 4
+  }
+  LD_C_L(cpu) {
+    cpu.register.c = cpu.register.l
+    cpu.register.m = 4
+  }
+  LD_C_HL(cpu) { // TODO
+    cpu.register.c = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_D_B(cpu) {
+    cpu.register.d = cpu.register.b
+    cpu.register.m = 4
+  }
+  LD_D_C(cpu) {
+    cpu.register.d = cpu.register.c
+    cpu.register.m = 4
+  }
+  LD_D_D(cpu) {
+    cpu.register.d = cpu.register.d
+    cpu.register.m = 4
+  }
+  LD_D_E(cpu) {
+    cpu.register.d = cpu.register.e
+    cpu.register.m = 4
+  }
+  LD_D_H(cpu) {
+    cpu.register.d = cpu.register.h
+    cpu.register.m = 4
+  }
+  LD_D_L(cpu) {
+    cpu.register.d = cpu.register.l
+    cpu.register.m = 4
+  }
+  LD_D_HL(cpu) { // TODO
+    cpu.register.d = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_E_B(cpu) {
+    cpu.register.e = cpu.register.b
+    cpu.register.m = 4
+  }
+  LD_E_C(cpu) {
+    cpu.register.e = cpu.register.c
+    cpu.register.m = 4
+  }
+  LD_E_D(cpu) {
+    cpu.register.e = cpu.register.d
+    cpu.register.m = 4
+  }
+  LD_E_E(cpu) {
+    cpu.register.e = cpu.register.e
+    cpu.register.m = 4
+  }
+  LD_E_H(cpu) {
+    cpu.register.e = cpu.register.h
+    cpu.register.m = 4
+  }
+  LD_E_L(cpu) {
+    cpu.register.e = cpu.register.l
+    cpu.register.m = 4
+  }
+  LD_E_HL(cpu) { // TODO
+    cpu.register.e = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_H_B(cpu) {
+    cpu.register.h = cpu.register.b
+    cpu.register.m = 4
+  }
+  LD_H_C(cpu) {
+    cpu.register.h = cpu.register.c
+    cpu.register.m = 4
+  }
+  LD_H_D(cpu) {
+    cpu.register.h = cpu.register.d
+    cpu.register.m = 4
+  }
+  LD_H_E(cpu) {
+    cpu.register.h = cpu.register.e
+    cpu.register.m = 4
+  }
+  LD_H_H(cpu) {
+    cpu.register.h = cpu.register.h
+    cpu.register.m = 4
+  }
+  LD_H_L(cpu) {
+    cpu.register.h = cpu.register.l
+    cpu.register.m = 4
+  }
+  LD_H_HL(cpu) {
+    cpu.register.h = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_L_B(cpu) {
+    cpu.register.l = cpu.register.b
+    cpu.register.m = 4
+  }
+  LD_L_C(cpu) {
+    cpu.register.l = cpu.register.c
+    cpu.register.m = 4
+  }
+  LD_L_D(cpu) {
+    cpu.register.l = cpu.register.d
+    cpu.register.m = 4
+  }
+  LD_L_E(cpu) {
+    cpu.register.l = cpu.register.e
+    cpu.register.m = 4
+  }
+  LD_L_L(cpu) {
+    cpu.register.l = cpu.register.l
+    cpu.register.m = 4
+  }
+  LD_L_H(cpu) {
+    cpu.register.l = cpu.register.h
+    cpu.register.m = 4
+  }
+  LD_L_HL(cpu) {
+    cpu.register.l = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_HL_B(cpu) { // TODO
+    cpu.register.h = 0
+    cpu.register.l = cpu.register.b
+    cpu.register.m = 8
+  }
+  LD_HL_C(cpu) { // TODO
+    cpu.register.h = 0
+    cpu.register.l = cpu.register.c
+    cpu.register.m = 8
+  }
+  LD_HL_D(cpu) { // TODO
+    cpu.register.h = 0
+    cpu.register.l = cpu.register.d
+    cpu.register.m = 8
+  }
+  LD_HL_E(cpu) { // TODO
+    cpu.register.h = 0
+    cpu.register.l = cpu.register.e
+    cpu.register.m = 8
+  }
+  LD_HL_H(cpu) { // TODO
+    cpu.register.h = 0
+    cpu.register.l = cpu.register.h
+    cpu.register.m = 8
+  }
+  LD_HL_L(cpu) { // TODO
+    cpu.register.h = 0
+    cpu.register.l = cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_HL_n(cpu, n) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: n,
+      data: cpu.register.h << 8 + cpu.register.l
+    })
+    cpu.register.m = 12
   }
 }
