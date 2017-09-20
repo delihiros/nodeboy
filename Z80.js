@@ -162,9 +162,29 @@ module.exports = class Z80 {
     cpu.register.a = cpu.register.l
     cpu.register.m = 4
   }
+  LD_A_BC(cpu) { // TODO
+    cpu.register.a = cpu.register.b << 8 + cpu.register.c
+    cpu.register.m = 8
+  }
+  LD_A_DE(cpu) { // TODO
+    cpu.register.a = cpu.register.d << 8 + cpu.register.e
+    cpu.register.m = 8
+  }
   LD_A_HL(cpu) { // TODO
     cpu.register.a = cpu.register.h << 8 + cpu.register.l
     cpu.register.m = 8
+  }
+  LD_A_nn(cpu, nn) {
+    cpu.register.a = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 16
+  }
+  LD_A_SHARP(cpu, sharp) {
+    cpu.register.a = sharp
+    cpu.register.m = 8
+  }
+  LD_B_A(cpu) {
+    cpu.register.b = cpu.register.a
+    cpu.register.m = 4
   }
   LD_B_B(cpu) {
     cpu.register.b = cpu.register.b
@@ -194,6 +214,10 @@ module.exports = class Z80 {
     cpu.register.b = cpu.register.h << 8 + cpu.register.l
     cpu.register.m = 8
   }
+  LD_C_A(cpu) {
+    cpu.register.c = cpu.register.a
+    cpu.register.m = 4
+  }
   LD_C_B(cpu) {
     cpu.register.c = cpu.register.b
     cpu.register.m = 4
@@ -221,6 +245,10 @@ module.exports = class Z80 {
   LD_C_HL(cpu) { // TODO
     cpu.register.c = cpu.register.h << 8 + cpu.register.l
     cpu.register.m = 8
+  }
+  LD_D_A(cpu) {
+    cpu.register.d = cpu.register.a
+    cpu.register.m = 4
   }
   LD_D_B(cpu) {
     cpu.register.d = cpu.register.b
@@ -250,6 +278,10 @@ module.exports = class Z80 {
     cpu.register.d = cpu.register.h << 8 + cpu.register.l
     cpu.register.m = 8
   }
+  LD_E_A(cpu) {
+    cpu.register.e = cpu.register.a
+    cpu.register.m = 4
+  }
   LD_E_B(cpu) {
     cpu.register.e = cpu.register.b
     cpu.register.m = 4
@@ -277,6 +309,10 @@ module.exports = class Z80 {
   LD_E_HL(cpu) { // TODO
     cpu.register.e = cpu.register.h << 8 + cpu.register.l
     cpu.register.m = 8
+  }
+  LD_H_A(cpu) {
+    cpu.register.h = cpu.register.a
+    cpu.register.m = 4
   }
   LD_H_B(cpu) {
     cpu.register.h = cpu.register.b
@@ -306,6 +342,10 @@ module.exports = class Z80 {
     cpu.register.h = cpu.register.h << 8 + cpu.register.l
     cpu.register.m = 8
   }
+  LD_L_A(cpu) {
+    cpu.register.l = cpu.register.a
+    cpu.register.m = 4
+  }
   LD_L_B(cpu) {
     cpu.register.l = cpu.register.b
     cpu.register.m = 4
@@ -332,6 +372,16 @@ module.exports = class Z80 {
   }
   LD_L_HL(cpu) {
     cpu.register.l = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD_BC_A(cpu) {
+    cpu.register.b = 0
+    cpu.register.c = cpu.register.a
+    cpu.register.m = 8
+  }
+  LD_DE_A(cpu) {
+    cpu.register.d = 0
+    cpu.register.e = cpu.register.a
     cpu.register.m = 8
   }
   LD_HL_B(cpu) { // TODO
@@ -372,4 +422,12 @@ module.exports = class Z80 {
     })
     cpu.register.m = 12
   }
+  LD_nn_A(cpu, nn) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: nn,
+      data: cpu.register.a
+    })
+  }
+
 }
