@@ -146,6 +146,14 @@ module.exports = class Z80 {
     cpu.register.a = cpu.register.c
     cpu.register.m = 4
   }
+  LD_A__C(cpu) {
+    var v = cpu.port['mmu'].send({
+      op: 'readByte',
+      addr: cpu.register.c + 0xFF00,
+    })
+    cpu.register.a = v
+    cpu.register.m = 8
+  }
   LD_A_D(cpu) {
     cpu.register.a = cpu.register.d
     cpu.register.m = 4
@@ -181,6 +189,12 @@ module.exports = class Z80 {
   LD_A_SHARP(cpu, sharp) {
     cpu.register.a = sharp
     cpu.register.m = 8
+  }
+  LD_A__HLD(cpu) {
+    cpu.LDD_A__HL(cpu)
+  }
+  LD_A__HL_MINUS(cpu) {
+    cpu.LDD_A__HL(cpu)
   }
   LD_B_A(cpu) {
     cpu.register.b = cpu.register.a
@@ -244,6 +258,14 @@ module.exports = class Z80 {
   }
   LD_C_HL(cpu) { // TODO
     cpu.register.c = cpu.register.h << 8 + cpu.register.l
+    cpu.register.m = 8
+  }
+  LD__C_A(cpu) {
+    cpu.port['mmu'].send({
+      op: 'writeByte',
+      addr: cpu.register.c + 0xFF00,
+      data: cpu.register.a
+    })
     cpu.register.m = 8
   }
   LD_D_A(cpu) {
@@ -429,5 +451,32 @@ module.exports = class Z80 {
       data: cpu.register.a
     })
   }
-
+  LDD_A__HL(cpu) {
+    var v = cpu.port['mmu'].send({
+      op: 'readByte',
+      addr: cpu.register.h << 8 + cpu.register.l
+    })
+    cpu.register.a = v
+    var addr = cpu.register.h << 8 + cpu.register.l - 1
+    cpu.register.h = addr & 0xFF00
+    cpu.register.l = addr & 0x00FF
+    cpu.register.m = 8
+  }
+  LD_A__HLI(cpu) {
+    cpu.LDI_A__HL(cpu)
+  }
+  LD_A__HL_PLUS(cpu) {
+    cpu.LDI_A__HL(cpu)
+  }
+  LDI_A__HL(cpu) {
+    var v = cpu.port['mmu'].send({
+      op: 'readByte',
+      addr: cpu.register.h << 8 + cpu.register.l
+    })
+    cpu.register.a = v
+    var addr = cpu.register.h << 8 + cpu.register.l + 1
+    cpu.register.h = addr & 0xFF00
+    cpu.register.l = addr & 0x00FF
+    cpu.register.m = 8
+  }
 }
